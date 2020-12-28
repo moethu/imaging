@@ -13,11 +13,11 @@ func TestResize(t *testing.T) {
 		src  image.Image
 		w, h int
 		f    ResampleFilter
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"Resize 2x2 1x1 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -27,7 +27,7 @@ func TestResize(t *testing.T) {
 			},
 			1, 1,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 1),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x55, 0x55, 0x55, 0xc0},
@@ -35,7 +35,7 @@ func TestResize(t *testing.T) {
 		},
 		{
 			"Resize 2x2 1x2 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -45,7 +45,7 @@ func TestResize(t *testing.T) {
 			},
 			1, 2,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 2),
 				Stride: 1 * 4,
 				Pix: []uint8{
@@ -56,7 +56,7 @@ func TestResize(t *testing.T) {
 		},
 		{
 			"Resize 2x2 2x1 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -66,7 +66,7 @@ func TestResize(t *testing.T) {
 			},
 			2, 1,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -76,7 +76,7 @@ func TestResize(t *testing.T) {
 		},
 		{
 			"Resize 2x2 2x2 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -86,7 +86,7 @@ func TestResize(t *testing.T) {
 			},
 			2, 2,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -97,7 +97,7 @@ func TestResize(t *testing.T) {
 		},
 		{
 			"Resize 3x1 1x1 nearest",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 0),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -106,7 +106,7 @@ func TestResize(t *testing.T) {
 			},
 			1, 1,
 			NearestNeighbor,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 1),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x00, 0xff, 0x00, 0xff},
@@ -114,7 +114,7 @@ func TestResize(t *testing.T) {
 		},
 		{
 			"Resize 2x2 0x4 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -124,7 +124,7 @@ func TestResize(t *testing.T) {
 			},
 			0, 4,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 4, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -137,7 +137,7 @@ func TestResize(t *testing.T) {
 		},
 		{
 			"Resize 2x2 4x0 linear",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -147,7 +147,7 @@ func TestResize(t *testing.T) {
 			},
 			4, 0,
 			Linear,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 4, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -160,18 +160,18 @@ func TestResize(t *testing.T) {
 		},
 		{
 			"Resize 0x0 1x1 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, -1, -1),
 				Stride: 0,
 				Pix:    []uint8{},
 			},
 			1, 1,
 			Box,
-			&image.NRGBA{},
+			&image.RGBA{},
 		},
 		{
 			"Resize 2x2 0x0 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -181,11 +181,11 @@ func TestResize(t *testing.T) {
 			},
 			0, 0,
 			Box,
-			&image.NRGBA{},
+			&image.RGBA{},
 		},
 		{
 			"Resize 2x2 -1x0 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -195,13 +195,13 @@ func TestResize(t *testing.T) {
 			},
 			-1, 0,
 			Box,
-			&image.NRGBA{},
+			&image.RGBA{},
 		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := Resize(tc.src, tc.w, tc.h, tc.f)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -227,10 +227,10 @@ func TestResampleFilters(t *testing.T) {
 		Cosine,
 	} {
 		t.Run("", func(t *testing.T) {
-			src := image.NewNRGBA(image.Rect(-1, -1, 2, 3))
+			src := image.NewRGBA(image.Rect(-1, -1, 2, 3))
 			got := Resize(src, 5, 6, filter)
-			want := image.NewNRGBA(image.Rect(0, 0, 5, 6))
-			if !compareNRGBA(got, want, 0) {
+			want := image.NewRGBA(image.Rect(0, 0, 5, 6))
+			if !compareRGBA(got, want, 0) {
 				t.Fatalf("got result %#v want %#v", got, want)
 			}
 			if filter.Kernel != nil {
@@ -254,7 +254,7 @@ func TestResizeGolden(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to open image: %v", err)
 		}
-		if !compareNRGBAGolden(got, toNRGBA(want)) {
+		if !compareRGBAGolden(got, toRGBA(want)) {
 			t.Fatalf("resulting image differs from golden: %s", name)
 		}
 	}
@@ -266,11 +266,11 @@ func TestFit(t *testing.T) {
 		src  image.Image
 		w, h int
 		f    ResampleFilter
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"Fit 2x2 1x10 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -280,7 +280,7 @@ func TestFit(t *testing.T) {
 			},
 			1, 10,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 1),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x55, 0x55, 0x55, 0xc0},
@@ -288,7 +288,7 @@ func TestFit(t *testing.T) {
 		},
 		{
 			"Fit 2x2 10x1 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -298,7 +298,7 @@ func TestFit(t *testing.T) {
 			},
 			10, 1,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 1),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x55, 0x55, 0x55, 0xc0},
@@ -306,7 +306,7 @@ func TestFit(t *testing.T) {
 		},
 		{
 			"Fit 2x2 10x10 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -316,7 +316,7 @@ func TestFit(t *testing.T) {
 			},
 			10, 10,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -327,18 +327,18 @@ func TestFit(t *testing.T) {
 		},
 		{
 			"Fit 0x0 1x1 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, -1, -1),
 				Stride: 0,
 				Pix:    []uint8{},
 			},
 			1, 1,
 			Box,
-			&image.NRGBA{},
+			&image.RGBA{},
 		},
 		{
 			"Fit 2x2 0x0 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -348,11 +348,11 @@ func TestFit(t *testing.T) {
 			},
 			0, 0,
 			Box,
-			&image.NRGBA{},
+			&image.RGBA{},
 		},
 		{
 			"Fit 2x2 -1x0 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -362,13 +362,13 @@ func TestFit(t *testing.T) {
 			},
 			-1, 0,
 			Box,
-			&image.NRGBA{},
+			&image.RGBA{},
 		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := Fit(tc.src, tc.w, tc.h, tc.f)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -382,7 +382,7 @@ func TestFitGolden(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to open image: %v", err)
 	}
-	if !compareNRGBAGolden(got, toNRGBA(want)) {
+	if !compareRGBAGolden(got, toRGBA(want)) {
 		t.Fatalf("resulting image differs from golden: %s", name)
 	}
 }
@@ -394,11 +394,11 @@ func TestFill(t *testing.T) {
 		w, h int
 		a    Anchor
 		f    ResampleFilter
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"Fill 4x4 4x4 TopRight Box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -411,7 +411,7 @@ func TestFill(t *testing.T) {
 			4, 4,
 			TopRight,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 4, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -424,7 +424,7 @@ func TestFill(t *testing.T) {
 		},
 		{
 			"Fill 4x4 0x4 Left Box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -437,15 +437,15 @@ func TestFill(t *testing.T) {
 			0, 4,
 			Left,
 			Box,
-			&image.NRGBA{},
+			&image.RGBA{},
 		},
 		{
 			"Fill 0x0 4x4 Right Box",
-			&image.NRGBA{},
+			&image.RGBA{},
 			4, 4,
 			Right,
 			Box,
-			&image.NRGBA{},
+			&image.RGBA{},
 		},
 		{
 			"Fill 100x200 20x10 Center Linear",
@@ -453,7 +453,7 @@ func TestFill(t *testing.T) {
 			20, 10,
 			Center,
 			Linear,
-			image.NewNRGBA(image.Rect(0, 0, 20, 10)),
+			image.NewRGBA(image.Rect(0, 0, 20, 10)),
 		},
 		{
 			"Fill 10x20 20x10 Center Linear",
@@ -461,13 +461,13 @@ func TestFill(t *testing.T) {
 			20, 10,
 			Center,
 			Linear,
-			image.NewNRGBA(image.Rect(0, 0, 20, 10)),
+			image.NewRGBA(image.Rect(0, 0, 20, 10)),
 		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := Fill(tc.src, tc.w, tc.h, tc.a, tc.f)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -487,7 +487,7 @@ func TestFillGolden(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to open image: %v", err)
 		}
-		if !compareNRGBAGolden(got, toNRGBA(want)) {
+		if !compareRGBAGolden(got, toRGBA(want)) {
 			t.Fatalf("resulting image differs from golden: %s", name)
 		}
 	}
@@ -500,11 +500,11 @@ func TestResizeAndCrop(t *testing.T) {
 		w, h int
 		a    Anchor
 		f    ResampleFilter
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"resizeAndCrop 4x4 2x2 Center Nearest",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -517,7 +517,7 @@ func TestResizeAndCrop(t *testing.T) {
 			2, 2,
 			Center,
 			NearestNeighbor,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -528,7 +528,7 @@ func TestResizeAndCrop(t *testing.T) {
 		},
 		{
 			"resizeAndCrop 4x4 1x4 TopLeft Nearest",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -541,7 +541,7 @@ func TestResizeAndCrop(t *testing.T) {
 			1, 4,
 			TopLeft,
 			NearestNeighbor,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 4),
 				Stride: 1 * 4,
 				Pix: []uint8{
@@ -554,7 +554,7 @@ func TestResizeAndCrop(t *testing.T) {
 		},
 		{
 			"resizeAndCrop 4x4 8x2 Bottom Nearest",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -567,7 +567,7 @@ func TestResizeAndCrop(t *testing.T) {
 			8, 2,
 			Bottom,
 			NearestNeighbor,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 8, 2),
 				Stride: 8 * 4,
 				Pix: []uint8{
@@ -578,7 +578,7 @@ func TestResizeAndCrop(t *testing.T) {
 		},
 		{
 			"resizeAndCrop 4x4 2x8 Top Nearest",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -591,7 +591,7 @@ func TestResizeAndCrop(t *testing.T) {
 			2, 8,
 			Top,
 			NearestNeighbor,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 8),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -608,7 +608,7 @@ func TestResizeAndCrop(t *testing.T) {
 		},
 		{
 			"resizeAndCrop 4x4 4x4 TopRight Box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -621,7 +621,7 @@ func TestResizeAndCrop(t *testing.T) {
 			4, 4,
 			TopRight,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 4, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -636,7 +636,7 @@ func TestResizeAndCrop(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := resizeAndCrop(tc.src, tc.w, tc.h, tc.a, tc.f)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -650,11 +650,11 @@ func TestCropAndResize(t *testing.T) {
 		w, h int
 		a    Anchor
 		f    ResampleFilter
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"cropAndResize 4x4 2x2 Center Nearest",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -667,7 +667,7 @@ func TestCropAndResize(t *testing.T) {
 			2, 2,
 			Center,
 			NearestNeighbor,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -678,7 +678,7 @@ func TestCropAndResize(t *testing.T) {
 		},
 		{
 			"cropAndResize 4x4 1x4 TopLeft Nearest",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -691,7 +691,7 @@ func TestCropAndResize(t *testing.T) {
 			1, 4,
 			TopLeft,
 			NearestNeighbor,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 4),
 				Stride: 1 * 4,
 				Pix: []uint8{
@@ -704,7 +704,7 @@ func TestCropAndResize(t *testing.T) {
 		},
 		{
 			"cropAndResize 4x4 8x2 Bottom Nearest",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -717,7 +717,7 @@ func TestCropAndResize(t *testing.T) {
 			8, 2,
 			Bottom,
 			NearestNeighbor,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 8, 2),
 				Stride: 8 * 4,
 				Pix: []uint8{
@@ -728,7 +728,7 @@ func TestCropAndResize(t *testing.T) {
 		},
 		{
 			"cropAndResize 4x4 2x8 Top Nearest",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -741,7 +741,7 @@ func TestCropAndResize(t *testing.T) {
 			2, 8,
 			Top,
 			NearestNeighbor,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 8),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -758,7 +758,7 @@ func TestCropAndResize(t *testing.T) {
 		},
 		{
 			"cropAndResize 4x4 4x4 TopRight Box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -771,7 +771,7 @@ func TestCropAndResize(t *testing.T) {
 			4, 4,
 			TopRight,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 4, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -786,7 +786,7 @@ func TestCropAndResize(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := cropAndResize(tc.src, tc.w, tc.h, tc.a, tc.f)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -799,11 +799,11 @@ func TestThumbnail(t *testing.T) {
 		src  image.Image
 		w, h int
 		f    ResampleFilter
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"Thumbnail 6x2 1x1 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 5, 1),
 				Stride: 6 * 4,
 				Pix: []uint8{
@@ -813,7 +813,7 @@ func TestThumbnail(t *testing.T) {
 			},
 			1, 1,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 1),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x55, 0x55, 0x55, 0xc0},
@@ -821,7 +821,7 @@ func TestThumbnail(t *testing.T) {
 		},
 		{
 			"Thumbnail 2x6 1x1 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 5),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -835,7 +835,7 @@ func TestThumbnail(t *testing.T) {
 			},
 			1, 1,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 1),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x55, 0x55, 0x55, 0xc0},
@@ -843,7 +843,7 @@ func TestThumbnail(t *testing.T) {
 		},
 		{
 			"Thumbnail 1x3 2x2 box",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 0, 2),
 				Stride: 1 * 4,
 				Pix: []uint8{
@@ -854,7 +854,7 @@ func TestThumbnail(t *testing.T) {
 			},
 			2, 2,
 			Box,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -867,7 +867,7 @@ func TestThumbnail(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := Thumbnail(tc.src, tc.w, tc.h, tc.f)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})

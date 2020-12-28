@@ -7,12 +7,12 @@ import (
 )
 
 // FlipH flips the image horizontally (from left to right) and returns the transformed image.
-func FlipH(img image.Image) *image.NRGBA {
+func FlipH(img image.Image) *image.RGBA {
 	src := newScanner(img)
 	dstW := src.w
 	dstH := src.h
 	rowSize := dstW * 4
-	dst := image.NewNRGBA(image.Rect(0, 0, dstW, dstH))
+	dst := image.NewRGBA(image.Rect(0, 0, dstW, dstH))
 	parallel(0, dstH, func(ys <-chan int) {
 		for dstY := range ys {
 			i := dstY * dst.Stride
@@ -25,12 +25,12 @@ func FlipH(img image.Image) *image.NRGBA {
 }
 
 // FlipV flips the image vertically (from top to bottom) and returns the transformed image.
-func FlipV(img image.Image) *image.NRGBA {
+func FlipV(img image.Image) *image.RGBA {
 	src := newScanner(img)
 	dstW := src.w
 	dstH := src.h
 	rowSize := dstW * 4
-	dst := image.NewNRGBA(image.Rect(0, 0, dstW, dstH))
+	dst := image.NewRGBA(image.Rect(0, 0, dstW, dstH))
 	parallel(0, dstH, func(ys <-chan int) {
 		for dstY := range ys {
 			i := dstY * dst.Stride
@@ -42,12 +42,12 @@ func FlipV(img image.Image) *image.NRGBA {
 }
 
 // Transpose flips the image horizontally and rotates 90 degrees counter-clockwise.
-func Transpose(img image.Image) *image.NRGBA {
+func Transpose(img image.Image) *image.RGBA {
 	src := newScanner(img)
 	dstW := src.h
 	dstH := src.w
 	rowSize := dstW * 4
-	dst := image.NewNRGBA(image.Rect(0, 0, dstW, dstH))
+	dst := image.NewRGBA(image.Rect(0, 0, dstW, dstH))
 	parallel(0, dstH, func(ys <-chan int) {
 		for dstY := range ys {
 			i := dstY * dst.Stride
@@ -59,12 +59,12 @@ func Transpose(img image.Image) *image.NRGBA {
 }
 
 // Transverse flips the image vertically and rotates 90 degrees counter-clockwise.
-func Transverse(img image.Image) *image.NRGBA {
+func Transverse(img image.Image) *image.RGBA {
 	src := newScanner(img)
 	dstW := src.h
 	dstH := src.w
 	rowSize := dstW * 4
-	dst := image.NewNRGBA(image.Rect(0, 0, dstW, dstH))
+	dst := image.NewRGBA(image.Rect(0, 0, dstW, dstH))
 	parallel(0, dstH, func(ys <-chan int) {
 		for dstY := range ys {
 			i := dstY * dst.Stride
@@ -77,12 +77,12 @@ func Transverse(img image.Image) *image.NRGBA {
 }
 
 // Rotate90 rotates the image 90 degrees counter-clockwise and returns the transformed image.
-func Rotate90(img image.Image) *image.NRGBA {
+func Rotate90(img image.Image) *image.RGBA {
 	src := newScanner(img)
 	dstW := src.h
 	dstH := src.w
 	rowSize := dstW * 4
-	dst := image.NewNRGBA(image.Rect(0, 0, dstW, dstH))
+	dst := image.NewRGBA(image.Rect(0, 0, dstW, dstH))
 	parallel(0, dstH, func(ys <-chan int) {
 		for dstY := range ys {
 			i := dstY * dst.Stride
@@ -94,12 +94,12 @@ func Rotate90(img image.Image) *image.NRGBA {
 }
 
 // Rotate180 rotates the image 180 degrees counter-clockwise and returns the transformed image.
-func Rotate180(img image.Image) *image.NRGBA {
+func Rotate180(img image.Image) *image.RGBA {
 	src := newScanner(img)
 	dstW := src.w
 	dstH := src.h
 	rowSize := dstW * 4
-	dst := image.NewNRGBA(image.Rect(0, 0, dstW, dstH))
+	dst := image.NewRGBA(image.Rect(0, 0, dstW, dstH))
 	parallel(0, dstH, func(ys <-chan int) {
 		for dstY := range ys {
 			i := dstY * dst.Stride
@@ -112,12 +112,12 @@ func Rotate180(img image.Image) *image.NRGBA {
 }
 
 // Rotate270 rotates the image 270 degrees counter-clockwise and returns the transformed image.
-func Rotate270(img image.Image) *image.NRGBA {
+func Rotate270(img image.Image) *image.RGBA {
 	src := newScanner(img)
 	dstW := src.h
 	dstH := src.w
 	rowSize := dstW * 4
-	dst := image.NewNRGBA(image.Rect(0, 0, dstW, dstH))
+	dst := image.NewRGBA(image.Rect(0, 0, dstW, dstH))
 	parallel(0, dstH, func(ys <-chan int) {
 		for dstY := range ys {
 			i := dstY * dst.Stride
@@ -132,7 +132,7 @@ func Rotate270(img image.Image) *image.NRGBA {
 // Rotate rotates an image by the given angle counter-clockwise .
 // The angle parameter is the rotation angle in degrees.
 // The bgColor parameter specifies the color of the uncovered zone after the rotation.
-func Rotate(img image.Image, angle float64, bgColor color.Color) *image.NRGBA {
+func Rotate(img image.Image, angle float64, bgColor color.Color) *image.RGBA {
 	angle = angle - math.Floor(angle/360)*360
 
 	switch angle {
@@ -146,11 +146,11 @@ func Rotate(img image.Image, angle float64, bgColor color.Color) *image.NRGBA {
 		return Rotate270(img)
 	}
 
-	src := toNRGBA(img)
+	src := toRGBA(img)
 	srcW := src.Bounds().Max.X
 	srcH := src.Bounds().Max.Y
 	dstW, dstH := rotatedSize(srcW, srcH, angle)
-	dst := image.NewNRGBA(image.Rect(0, 0, dstW, dstH))
+	dst := image.NewRGBA(image.Rect(0, 0, dstW, dstH))
 
 	if dstW <= 0 || dstH <= 0 {
 		return dst
@@ -161,7 +161,7 @@ func Rotate(img image.Image, angle float64, bgColor color.Color) *image.NRGBA {
 	dstXOff := float64(dstW)/2 - 0.5
 	dstYOff := float64(dstH)/2 - 0.5
 
-	bgColorNRGBA := color.NRGBAModel.Convert(bgColor).(color.NRGBA)
+	bgColorRGBA := color.RGBAModel.Convert(bgColor).(color.RGBA)
 	sin, cos := math.Sincos(math.Pi * angle / 180)
 
 	parallel(0, dstH, func(ys <-chan int) {
@@ -169,7 +169,7 @@ func Rotate(img image.Image, angle float64, bgColor color.Color) *image.NRGBA {
 			for dstX := 0; dstX < dstW; dstX++ {
 				xf, yf := rotatePoint(float64(dstX)-dstXOff, float64(dstY)-dstYOff, sin, cos)
 				xf, yf = xf+srcXOff, yf+srcYOff
-				interpolatePoint(dst, dstX, dstY, src, xf, yf, bgColorNRGBA)
+				interpolatePoint(dst, dstX, dstY, src, xf, yf, bgColorRGBA)
 			}
 		}
 	})
@@ -208,7 +208,7 @@ func rotatedSize(w, h int, angle float64) (int, int) {
 	return int(neww), int(newh)
 }
 
-func interpolatePoint(dst *image.NRGBA, dstX, dstY int, src *image.NRGBA, xf, yf float64, bgColor color.NRGBA) {
+func interpolatePoint(dst *image.RGBA, dstX, dstY int, src *image.RGBA, xf, yf float64, bgColor color.RGBA) {
 	j := dstY*dst.Stride + dstX*4
 	d := dst.Pix[j : j+4 : j+4]
 

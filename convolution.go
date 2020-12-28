@@ -18,21 +18,21 @@ type ConvolveOptions struct {
 
 // Convolve3x3 convolves the image with the specified 3x3 convolution kernel.
 // Default parameters are used if a nil *ConvolveOptions is passed.
-func Convolve3x3(img image.Image, kernel [9]float64, options *ConvolveOptions) *image.NRGBA {
+func Convolve3x3(img image.Image, kernel [9]float64, options *ConvolveOptions) *image.RGBA {
 	return convolve(img, kernel[:], options)
 }
 
 // Convolve5x5 convolves the image with the specified 5x5 convolution kernel.
 // Default parameters are used if a nil *ConvolveOptions is passed.
-func Convolve5x5(img image.Image, kernel [25]float64, options *ConvolveOptions) *image.NRGBA {
+func Convolve5x5(img image.Image, kernel [25]float64, options *ConvolveOptions) *image.RGBA {
 	return convolve(img, kernel[:], options)
 }
 
-func convolve(img image.Image, kernel []float64, options *ConvolveOptions) *image.NRGBA {
-	src := toNRGBA(img)
+func convolve(img image.Image, kernel []float64, options *ConvolveOptions) *image.RGBA {
+	src := toRGBA(img)
 	w := src.Bounds().Max.X
 	h := src.Bounds().Max.Y
-	dst := image.NewNRGBA(image.Rect(0, 0, w, h))
+	dst := image.NewRGBA(image.Rect(0, 0, w, h))
 
 	if w < 1 || h < 1 {
 		return dst

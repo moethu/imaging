@@ -8,7 +8,7 @@ import (
 type scanner struct {
 	image   image.Image
 	w, h    int
-	palette []color.NRGBA
+	palette []color.RGBA
 }
 
 func newScanner(img image.Image) *scanner {
@@ -18,9 +18,9 @@ func newScanner(img image.Image) *scanner {
 		h:     img.Bounds().Dy(),
 	}
 	if img, ok := img.(*image.Paletted); ok {
-		s.palette = make([]color.NRGBA, len(img.Palette))
+		s.palette = make([]color.RGBA, len(img.Palette))
 		for i := 0; i < len(img.Palette); i++ {
-			s.palette[i] = color.NRGBAModel.Convert(img.Palette[i]).(color.NRGBA)
+			s.palette[i] = color.RGBAModel.Convert(img.Palette[i]).(color.RGBA)
 		}
 	}
 	return s

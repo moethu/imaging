@@ -44,7 +44,7 @@ func Example() {
 	)
 
 	// Create a new image and paste the four produced images into it.
-	dst := imaging.New(400, 400, color.NRGBA{0, 0, 0, 0})
+	dst := imaging.New(400, 400, color.RGBA{0, 0, 0, 0})
 	dst = imaging.Paste(dst, img1, image.Pt(0, 0))
 	dst = imaging.Paste(dst, img2, image.Pt(0, 200))
 	dst = imaging.Paste(dst, img3, image.Pt(200, 0))

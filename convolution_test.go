@@ -11,11 +11,11 @@ func TestConvolve3x3(t *testing.T) {
 		src     image.Image
 		kernel  [9]float64
 		options *ConvolveOptions
-		want    *image.NRGBA
+		want    *image.RGBA
 	}{
 		{
 			"Convolve3x3 0x0",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 0, 0),
 				Stride: 0,
 				Pix:    []uint8{},
@@ -26,11 +26,11 @@ func TestConvolve3x3(t *testing.T) {
 				0, 0, 0,
 			},
 			nil,
-			&image.NRGBA{Rect: image.Rect(0, 0, 0, 0)},
+			&image.RGBA{Rect: image.Rect(0, 0, 0, 0)},
 		},
 		{
 			"Convolve3x3 4x4 identity",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -46,7 +46,7 @@ func TestConvolve3x3(t *testing.T) {
 				0, 0, 0,
 			},
 			nil,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 4, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -59,7 +59,7 @@ func TestConvolve3x3(t *testing.T) {
 		},
 		{
 			"Convolve3x3 4x4 abs",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -75,7 +75,7 @@ func TestConvolve3x3(t *testing.T) {
 				0, 0, 0,
 			},
 			&ConvolveOptions{Abs: true},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 4, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -88,7 +88,7 @@ func TestConvolve3x3(t *testing.T) {
 		},
 		{
 			"Convolve3x3 4x4 bias",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -104,7 +104,7 @@ func TestConvolve3x3(t *testing.T) {
 				0, 0, 0,
 			},
 			&ConvolveOptions{Bias: 0x10},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 4, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -117,7 +117,7 @@ func TestConvolve3x3(t *testing.T) {
 		},
 		{
 			"Convolve3x3 4x4 norm",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -133,7 +133,7 @@ func TestConvolve3x3(t *testing.T) {
 				1, 1, 1,
 			},
 			&ConvolveOptions{Normalize: true},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 4, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -146,7 +146,7 @@ func TestConvolve3x3(t *testing.T) {
 		},
 		{
 			"Convolve3x3 3x3 laplacian",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -161,7 +161,7 @@ func TestConvolve3x3(t *testing.T) {
 				-1, -1, -1,
 			},
 			nil,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -176,7 +176,7 @@ func TestConvolve3x3(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := Convolve3x3(tc.src, tc.kernel, tc.options)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -189,11 +189,11 @@ func TestConvolve5x5(t *testing.T) {
 		src     image.Image
 		kernel  [25]float64
 		options *ConvolveOptions
-		want    *image.NRGBA
+		want    *image.RGBA
 	}{
 		{
 			"Convolve5x5 4x4 translate",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -211,7 +211,7 @@ func TestConvolve5x5(t *testing.T) {
 				0, 0, 0, 0, 1,
 			},
 			nil,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 4, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -227,7 +227,7 @@ func TestConvolve5x5(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := Convolve5x5(tc.src, tc.kernel, tc.options)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})

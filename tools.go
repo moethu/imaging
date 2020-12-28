@@ -8,17 +8,17 @@ import (
 )
 
 // New creates a new image with the specified width and height, and fills it with the specified color.
-func New(width, height int, fillColor color.Color) *image.NRGBA {
+func New(width, height int, fillColor color.Color) *image.RGBA {
 	if width <= 0 || height <= 0 {
-		return &image.NRGBA{}
+		return &image.RGBA{}
 	}
 
-	c := color.NRGBAModel.Convert(fillColor).(color.NRGBA)
-	if (c == color.NRGBA{0, 0, 0, 0}) {
-		return image.NewNRGBA(image.Rect(0, 0, width, height))
+	c := color.RGBAModel.Convert(fillColor).(color.RGBA)
+	if (c == color.RGBA{0, 0, 0, 0}) {
+		return image.NewRGBA(image.Rect(0, 0, width, height))
 	}
 
-	return &image.NRGBA{
+	return &image.RGBA{
 		Pix:    bytes.Repeat([]byte{c.R, c.G, c.B, c.A}, width*height),
 		Stride: 4 * width,
 		Rect:   image.Rect(0, 0, width, height),
@@ -26,9 +26,9 @@ func New(width, height int, fillColor color.Color) *image.NRGBA {
 }
 
 // Clone returns a copy of the given image.
-func Clone(img image.Image) *image.NRGBA {
+func Clone(img image.Image) *image.RGBA {
 	src := newScanner(img)
-	dst := image.NewNRGBA(image.Rect(0, 0, src.w, src.h))
+	dst := image.NewRGBA(image.Rect(0, 0, src.w, src.h))
 	size := src.w * 4
 	parallel(0, src.h, func(ys <-chan int) {
 		for y := range ys {
@@ -91,17 +91,17 @@ func anchorPt(b image.Rectangle, w, h int, anchor Anchor) image.Point {
 
 // Crop cuts out a rectangular region with the specified bounds
 // from the image and returns the cropped image.
-func Crop(img image.Image, rect image.Rectangle) *image.NRGBA {
+func Crop(img image.Image, rect image.Rectangle) *image.RGBA {
 	r := rect.Intersect(img.Bounds()).Sub(img.Bounds().Min)
 	if r.Empty() {
-		return &image.NRGBA{}
+		return &image.RGBA{}
 	}
 	if r.Eq(img.Bounds().Sub(img.Bounds().Min)) {
 		return Clone(img)
 	}
 
 	src := newScanner(img)
-	dst := image.NewNRGBA(image.Rect(0, 0, r.Dx(), r.Dy()))
+	dst := image.NewRGBA(image.Rect(0, 0, r.Dx(), r.Dy()))
 	rowSize := r.Dx() * 4
 	parallel(r.Min.Y, r.Max.Y, func(ys <-chan int) {
 		for y := range ys {
@@ -114,7 +114,7 @@ func Crop(img image.Image, rect image.Rectangle) *image.NRGBA {
 
 // CropAnchor cuts out a rectangular region with the specified size
 // from the image using the specified anchor point and returns the cropped image.
-func CropAnchor(img image.Image, width, height int, anchor Anchor) *image.NRGBA {
+func CropAnchor(img image.Image, width, height int, anchor Anchor) *image.RGBA {
 	srcBounds := img.Bounds()
 	pt := anchorPt(srcBounds, width, height, anchor)
 	r := image.Rect(0, 0, width, height).Add(pt)
@@ -124,12 +124,12 @@ func CropAnchor(img image.Image, width, height int, anchor Anchor) *image.NRGBA 
 
 // CropCenter cuts out a rectangular region with the specified size
 // from the center of the image and returns the cropped image.
-func CropCenter(img image.Image, width, height int) *image.NRGBA {
+func CropCenter(img image.Image, width, height int) *image.RGBA {
 	return CropAnchor(img, width, height, Center)
 }
 
 // Paste pastes the img image to the background image at the specified position and returns the combined image.
-func Paste(background, img image.Image, pos image.Point) *image.NRGBA {
+func Paste(background, img image.Image, pos image.Point) *image.RGBA {
 	dst := Clone(background)
 	pos = pos.Sub(background.Bounds().Min)
 	pasteRect := image.Rectangle{Min: pos, Max: pos.Add(img.Bounds().Size())}
@@ -157,7 +157,7 @@ func Paste(background, img image.Image, pos image.Point) *image.NRGBA {
 }
 
 // PasteCenter pastes the img image to the center of the background image and returns the combined image.
-func PasteCenter(background, img image.Image) *image.NRGBA {
+func PasteCenter(background, img image.Image) *image.RGBA {
 	bgBounds := background.Bounds()
 	bgW := bgBounds.Dx()
 	bgH := bgBounds.Dy()
@@ -185,7 +185,7 @@ func PasteCenter(background, img image.Image) *image.NRGBA {
 //	// Blend two opaque images of the same size.
 //	dstImage := imaging.Overlay(imageOne, imageTwo, image.Pt(0, 0), 0.5)
 //
-func Overlay(background, img image.Image, pos image.Point, opacity float64) *image.NRGBA {
+func Overlay(background, img image.Image, pos image.Point, opacity float64) *image.RGBA {
 	opacity = math.Min(math.Max(opacity, 0.0), 1.0) // Ensure 0.0 <= opacity <= 1.0.
 	dst := Clone(background)
 	pos = pos.Sub(background.Bounds().Min)
@@ -240,7 +240,7 @@ func Overlay(background, img image.Image, pos image.Point, opacity float64) *ima
 // OverlayCenter overlays the img image to the center of the background image and
 // returns the combined image. Opacity parameter is the opacity of the img
 // image layer, used to compose the images, it must be from 0.0 to 1.0.
-func OverlayCenter(background, img image.Image, opacity float64) *image.NRGBA {
+func OverlayCenter(background, img image.Image, opacity float64) *image.RGBA {
 	bgBounds := background.Bounds()
 	bgW := bgBounds.Dx()
 	bgH := bgBounds.Dy()

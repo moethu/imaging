@@ -87,9 +87,9 @@ func reverse(pix []uint8) {
 	}
 }
 
-func toNRGBA(img image.Image) *image.NRGBA {
-	if img, ok := img.(*image.NRGBA); ok {
-		return &image.NRGBA{
+func toRGBA(img image.Image) *image.RGBA {
+	if img, ok := img.(*image.RGBA); ok {
+		return &image.RGBA{
 			Pix:    img.Pix,
 			Stride: img.Stride,
 			Rect:   img.Rect.Sub(img.Rect.Min),

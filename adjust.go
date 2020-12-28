@@ -7,9 +7,9 @@ import (
 )
 
 // Grayscale produces a grayscale version of the image.
-func Grayscale(img image.Image) *image.NRGBA {
+func Grayscale(img image.Image) *image.RGBA {
 	src := newScanner(img)
-	dst := image.NewNRGBA(image.Rect(0, 0, src.w, src.h))
+	dst := image.NewRGBA(image.Rect(0, 0, src.w, src.h))
 	parallel(0, src.h, func(ys <-chan int) {
 		for y := range ys {
 			i := y * dst.Stride
@@ -32,9 +32,9 @@ func Grayscale(img image.Image) *image.NRGBA {
 }
 
 // Invert produces an inverted (negated) version of the image.
-func Invert(img image.Image) *image.NRGBA {
+func Invert(img image.Image) *image.RGBA {
 	src := newScanner(img)
-	dst := image.NewNRGBA(image.Rect(0, 0, src.w, src.h))
+	dst := image.NewRGBA(image.Rect(0, 0, src.w, src.h))
 	parallel(0, src.h, func(ys <-chan int) {
 		for y := range ys {
 			i := y * dst.Stride
@@ -61,7 +61,7 @@ func Invert(img image.Image) *image.NRGBA {
 //  dstImage = imaging.AdjustSaturation(srcImage, 25) // Increase image saturation by 25%.
 //  dstImage = imaging.AdjustSaturation(srcImage, -10) // Decrease image saturation by 10%.
 //
-func AdjustSaturation(img image.Image, percentage float64) *image.NRGBA {
+func AdjustSaturation(img image.Image, percentage float64) *image.RGBA {
 	if percentage == 0 {
 		return Clone(img)
 	}
@@ -69,14 +69,14 @@ func AdjustSaturation(img image.Image, percentage float64) *image.NRGBA {
 	percentage = math.Min(math.Max(percentage, -100), 100)
 	multiplier := 1 + percentage/100
 
-	return AdjustFunc(img, func(c color.NRGBA) color.NRGBA {
+	return AdjustFunc(img, func(c color.RGBA) color.RGBA {
 		h, s, l := rgbToHSL(c.R, c.G, c.B)
 		s *= multiplier
 		if s > 1 {
 			s = 1
 		}
 		r, g, b := hslToRGB(h, s, l)
-		return color.NRGBA{r, g, b, c.A}
+		return color.RGBA{r, g, b, c.A}
 	})
 }
 
@@ -88,14 +88,14 @@ func AdjustSaturation(img image.Image, percentage float64) *image.NRGBA {
 //  dstImage = imaging.AdjustHue(srcImage, 90) // Shift Hue by 90°.
 //  dstImage = imaging.AdjustHue(srcImage, -30) // Shift Hue by -30°.
 //
-func AdjustHue(img image.Image, shift float64) *image.NRGBA {
+func AdjustHue(img image.Image, shift float64) *image.RGBA {
 	if math.Mod(shift, 360) == 0 {
 		return Clone(img)
 	}
 
 	summand := shift / 360
 
-	return AdjustFunc(img, func(c color.NRGBA) color.NRGBA {
+	return AdjustFunc(img, func(c color.RGBA) color.RGBA {
 		h, s, l := rgbToHSL(c.R, c.G, c.B)
 		h += summand
 		h = math.Mod(h, 1)
@@ -104,7 +104,7 @@ func AdjustHue(img image.Image, shift float64) *image.NRGBA {
 			h++
 		}
 		r, g, b := hslToRGB(h, s, l)
-		return color.NRGBA{r, g, b, c.A}
+		return color.RGBA{r, g, b, c.A}
 	})
 }
 
@@ -117,7 +117,7 @@ func AdjustHue(img image.Image, shift float64) *image.NRGBA {
 //	dstImage = imaging.AdjustContrast(srcImage, -10) // Decrease image contrast by 10%.
 //	dstImage = imaging.AdjustContrast(srcImage, 20) // Increase image contrast by 20%.
 //
-func AdjustContrast(img image.Image, percentage float64) *image.NRGBA {
+func AdjustContrast(img image.Image, percentage float64) *image.RGBA {
 	if percentage == 0 {
 		return Clone(img)
 	}
@@ -149,7 +149,7 @@ func AdjustContrast(img image.Image, percentage float64) *image.NRGBA {
 //	dstImage = imaging.AdjustBrightness(srcImage, -15) // Decrease image brightness by 15%.
 //	dstImage = imaging.AdjustBrightness(srcImage, 10) // Increase image brightness by 10%.
 //
-func AdjustBrightness(img image.Image, percentage float64) *image.NRGBA {
+func AdjustBrightness(img image.Image, percentage float64) *image.RGBA {
 	if percentage == 0 {
 		return Clone(img)
 	}
@@ -173,7 +173,7 @@ func AdjustBrightness(img image.Image, percentage float64) *image.NRGBA {
 //
 //	dstImage = imaging.AdjustGamma(srcImage, 0.7)
 //
-func AdjustGamma(img image.Image, gamma float64) *image.NRGBA {
+func AdjustGamma(img image.Image, gamma float64) *image.RGBA {
 	if gamma == 1 {
 		return Clone(img)
 	}
@@ -199,7 +199,7 @@ func AdjustGamma(img image.Image, gamma float64) *image.NRGBA {
 //	dstImage = imaging.AdjustSigmoid(srcImage, 0.5, 3.0) // Increase the contrast.
 //	dstImage = imaging.AdjustSigmoid(srcImage, 0.5, -3.0) // Decrease the contrast.
 //
-func AdjustSigmoid(img image.Image, midpoint, factor float64) *image.NRGBA {
+func AdjustSigmoid(img image.Image, midpoint, factor float64) *image.RGBA {
 	if factor == 0 {
 		return Clone(img)
 	}
@@ -235,9 +235,9 @@ func sigmoid(a, b, x float64) float64 {
 }
 
 // adjustLUT applies the given lookup table to the colors of the image.
-func adjustLUT(img image.Image, lut []uint8) *image.NRGBA {
+func adjustLUT(img image.Image, lut []uint8) *image.RGBA {
 	src := newScanner(img)
-	dst := image.NewNRGBA(image.Rect(0, 0, src.w, src.h))
+	dst := image.NewRGBA(image.Rect(0, 0, src.w, src.h))
 	lut = lut[0:256]
 	parallel(0, src.h, func(ys <-chan int) {
 		for y := range ys {
@@ -261,19 +261,19 @@ func adjustLUT(img image.Image, lut []uint8) *image.NRGBA {
 //
 //	dstImage = imaging.AdjustFunc(
 //		srcImage,
-//		func(c color.NRGBA) color.NRGBA {
+//		func(c color.RGBA) color.RGBA {
 //			// Shift the red channel by 16.
 //			r := int(c.R) + 16
 //			if r > 255 {
 //				r = 255
 //			}
-//			return color.NRGBA{uint8(r), c.G, c.B, c.A}
+//			return color.RGBA{uint8(r), c.G, c.B, c.A}
 //		}
 //	)
 //
-func AdjustFunc(img image.Image, fn func(c color.NRGBA) color.NRGBA) *image.NRGBA {
+func AdjustFunc(img image.Image, fn func(c color.RGBA) color.RGBA) *image.RGBA {
 	src := newScanner(img)
-	dst := image.NewNRGBA(image.Rect(0, 0, src.w, src.h))
+	dst := image.NewRGBA(image.Rect(0, 0, src.w, src.h))
 	parallel(0, src.h, func(ys <-chan int) {
 		for y := range ys {
 			i := y * dst.Stride
@@ -284,7 +284,7 @@ func AdjustFunc(img image.Image, fn func(c color.NRGBA) color.NRGBA) *image.NRGB
 				g := d[1]
 				b := d[2]
 				a := d[3]
-				c := fn(color.NRGBA{r, g, b, a})
+				c := fn(color.RGBA{r, g, b, a})
 				d[0] = c.R
 				d[1] = c.G
 				d[2] = c.B

@@ -39,7 +39,7 @@ func TestNew(t *testing.T) {
 		{
 			"New 3x3 with alpha",
 			3, 3,
-			color.NRGBA{0x01, 0x23, 0x45, 0x67},
+			color.RGBA{0x01, 0x23, 0x45, 0x67},
 			image.Rect(0, 0, 3, 3),
 			[]uint8{
 				0x01, 0x23, 0x45, 0x67, 0x01, 0x23, 0x45, 0x67, 0x01, 0x23, 0x45, 0x67,
@@ -57,7 +57,7 @@ func TestNew(t *testing.T) {
 		{
 			"New 800x600 custom",
 			800, 600,
-			color.NRGBA{1, 2, 3, 4},
+			color.RGBA{1, 2, 3, 4},
 			image.Rect(0, 0, 800, 600),
 			bytes.Repeat([]byte{1, 2, 3, 4}, 800*600),
 		},
@@ -66,9 +66,9 @@ func TestNew(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := New(tc.w, tc.h, tc.c)
-			want := image.NewNRGBA(tc.dstBounds)
+			want := image.NewRGBA(tc.dstBounds)
 			want.Pix = tc.dstPix
-			if !compareNRGBA(got, want, 0) {
+			if !compareRGBA(got, want, 0) {
 				t.Fatalf("got result %#v want %#v", got, want)
 			}
 		})
@@ -86,24 +86,24 @@ func TestClone(t *testing.T) {
 	testCases := []struct {
 		name string
 		src  image.Image
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
-			"Clone NRGBA",
-			&image.NRGBA{
+			"Clone RGBA",
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 0, 1),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x00, 0x11, 0x22, 0x33, 0xcc, 0xdd, 0xee, 0xff},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 2),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x00, 0x11, 0x22, 0x33, 0xcc, 0xdd, 0xee, 0xff},
 			},
 		},
 		{
-			"Clone NRGBA64",
-			&image.NRGBA64{
+			"Clone RGBA64",
+			&image.RGBA64{
 				Rect:   image.Rect(-1, -1, 0, 1),
 				Stride: 1 * 8,
 				Pix: []uint8{
@@ -111,7 +111,7 @@ func TestClone(t *testing.T) {
 					0xcc, 0xcc, 0xdd, 0xdd, 0xee, 0xee, 0xff, 0xff,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 2),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x00, 0x11, 0x22, 0x33, 0xcc, 0xdd, 0xee, 0xff},
@@ -124,7 +124,7 @@ func TestClone(t *testing.T) {
 				Stride: 1 * 4,
 				Pix:    []uint8{0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0xcc, 0xdd, 0xee, 0xff},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 3),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x00, 0x00, 0x00, 0x00, 0x00, 0x55, 0xaa, 0x33, 0xcc, 0xdd, 0xee, 0xff},
@@ -141,7 +141,7 @@ func TestClone(t *testing.T) {
 					0xcc, 0xcc, 0xdd, 0xdd, 0xee, 0xee, 0xff, 0xff,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 3),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x00, 0x00, 0x00, 0x00, 0x00, 0x55, 0xaa, 0x33, 0xcc, 0xdd, 0xee, 0xff},
@@ -154,7 +154,7 @@ func TestClone(t *testing.T) {
 				Stride: 1 * 1,
 				Pix:    []uint8{0x11, 0xee},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 2),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x11, 0x11, 0x11, 0xff, 0xee, 0xee, 0xee, 0xff},
@@ -167,7 +167,7 @@ func TestClone(t *testing.T) {
 				Stride: 1 * 2,
 				Pix:    []uint8{0x11, 0x11, 0xee, 0xee},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 2),
 				Stride: 1 * 4,
 				Pix:    []uint8{0x11, 0x11, 0x11, 0xff, 0xee, 0xee, 0xee, 0xff},
@@ -180,7 +180,7 @@ func TestClone(t *testing.T) {
 				Stride: 1 * 1,
 				Pix:    []uint8{0x11, 0xee},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 2),
 				Stride: 1 * 4,
 				Pix:    []uint8{0xff, 0xff, 0xff, 0x11, 0xff, 0xff, 0xff, 0xee},
@@ -197,7 +197,7 @@ func TestClone(t *testing.T) {
 				Cb:             []uint8{0x80, 0x80, 0x80, 0x6b, 0x56, 0xc0},
 				Cr:             []uint8{0x80, 0x80, 0x80, 0xc0, 0x4b, 0x76},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 6, 1),
 				Stride: 6 * 4,
 				Pix: []uint8{
@@ -221,7 +221,7 @@ func TestClone(t *testing.T) {
 				SubsampleRatio: image.YCbCrSubsampleRatio444,
 				Rect:           image.Rectangle{Min: image.Point{X: 0, Y: 0}, Max: image.Point{X: 4, Y: 4}},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Pix:    []uint8{0xff, 0x0, 0x0, 0xff, 0xff, 0x0, 0xff, 0xff, 0x0, 0x0, 0xff, 0xff, 0x49, 0xe1, 0xca, 0xff, 0x0, 0xff, 0x0, 0xff, 0xff, 0xff, 0x0, 0xff, 0x7f, 0x0, 0x0, 0xff, 0x7f, 0x0, 0x7f, 0xff, 0x0, 0x0, 0x7f, 0xff, 0x0, 0x7f, 0x7f, 0xff, 0x0, 0x7f, 0x0, 0xff, 0x82, 0x7f, 0x0, 0xff, 0x0, 0x0, 0x0, 0xff, 0x4c, 0x4c, 0x4c, 0xff, 0x99, 0x99, 0x99, 0xff, 0xff, 0xff, 0xff, 0xff},
 				Stride: 16,
 				Rect:   image.Rectangle{Min: image.Point{X: 0, Y: 0}, Max: image.Point{X: 4, Y: 4}},
@@ -238,7 +238,7 @@ func TestClone(t *testing.T) {
 				SubsampleRatio: image.YCbCrSubsampleRatio440,
 				Rect:           image.Rectangle{Min: image.Point{X: 0, Y: 0}, Max: image.Point{X: 4, Y: 4}},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Pix:    []uint8{0x0, 0xb5, 0x0, 0xff, 0x86, 0x86, 0x0, 0xff, 0x77, 0x0, 0x0, 0xff, 0xfb, 0x7d, 0xfb, 0xff, 0x0, 0xff, 0x1, 0xff, 0xff, 0xff, 0x1, 0xff, 0x80, 0x0, 0x1, 0xff, 0x7e, 0x0, 0x7e, 0xff, 0xe, 0xe, 0xe, 0xff, 0x59, 0x59, 0x59, 0xff, 0x4b, 0x4b, 0x4b, 0xff, 0x71, 0x71, 0x71, 0xff, 0x0, 0x0, 0x0, 0xff, 0x4c, 0x4c, 0x4c, 0xff, 0x99, 0x99, 0x99, 0xff, 0xff, 0xff, 0xff, 0xff},
 				Stride: 16,
 				Rect:   image.Rectangle{Min: image.Point{X: 0, Y: 0}, Max: image.Point{X: 4, Y: 4}},
@@ -255,7 +255,7 @@ func TestClone(t *testing.T) {
 				SubsampleRatio: image.YCbCrSubsampleRatio422,
 				Rect:           image.Rectangle{Min: image.Point{X: 0, Y: 0}, Max: image.Point{X: 4, Y: 4}},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Pix:    []uint8{0xe2, 0x0, 0xe1, 0xff, 0xff, 0x0, 0xfe, 0xff, 0x0, 0x4d, 0x36, 0xff, 0x49, 0xe1, 0xca, 0xff, 0xb3, 0xb3, 0x0, 0xff, 0xff, 0xff, 0x1, 0xff, 0x70, 0x0, 0x70, 0xff, 0x7e, 0x0, 0x7e, 0xff, 0x0, 0x34, 0x33, 0xff, 0x1, 0x7f, 0x7e, 0xff, 0x5c, 0x58, 0x0, 0xff, 0x82, 0x7e, 0x0, 0xff, 0x0, 0x0, 0x0, 0xff, 0x4c, 0x4c, 0x4c, 0xff, 0x99, 0x99, 0x99, 0xff, 0xff, 0xff, 0xff, 0xff},
 				Stride: 16,
 				Rect:   image.Rectangle{Min: image.Point{X: 0, Y: 0}, Max: image.Point{X: 4, Y: 4}},
@@ -271,7 +271,7 @@ func TestClone(t *testing.T) {
 				SubsampleRatio: image.YCbCrSubsampleRatio420,
 				Rect:           image.Rectangle{Min: image.Point{X: 0, Y: 0}, Max: image.Point{X: 4, Y: 4}},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Pix:    []uint8{0x69, 0x69, 0x0, 0xff, 0x86, 0x86, 0x0, 0xff, 0x67, 0x0, 0x67, 0xff, 0xfb, 0x7d, 0xfb, 0xff, 0xb3, 0xb3, 0x0, 0xff, 0xff, 0xff, 0x1, 0xff, 0x70, 0x0, 0x70, 0xff, 0x7e, 0x0, 0x7e, 0xff, 0xe, 0xe, 0xe, 0xff, 0x59, 0x59, 0x59, 0xff, 0x4b, 0x4b, 0x4b, 0xff, 0x71, 0x71, 0x71, 0xff, 0x0, 0x0, 0x0, 0xff, 0x4c, 0x4c, 0x4c, 0xff, 0x99, 0x99, 0x99, 0xff, 0xff, 0xff, 0xff, 0xff},
 				Stride: 16,
 				Rect:   image.Rectangle{Min: image.Point{X: 0, Y: 0}, Max: image.Point{X: 4, Y: 4}},
@@ -283,16 +283,16 @@ func TestClone(t *testing.T) {
 				Rect:   image.Rect(-1, -1, 5, 0),
 				Stride: 6 * 1,
 				Palette: color.Palette{
-					color.NRGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xff},
-					color.NRGBA{R: 0xff, G: 0xff, B: 0xff, A: 0xff},
-					color.NRGBA{R: 0x7f, G: 0x7f, B: 0x7f, A: 0xff},
-					color.NRGBA{R: 0x7f, G: 0x00, B: 0x00, A: 0xff},
-					color.NRGBA{R: 0x00, G: 0x7f, B: 0x00, A: 0xff},
-					color.NRGBA{R: 0x00, G: 0x00, B: 0x7f, A: 0xff},
+					color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xff},
+					color.RGBA{R: 0xff, G: 0xff, B: 0xff, A: 0xff},
+					color.RGBA{R: 0x7f, G: 0x7f, B: 0x7f, A: 0xff},
+					color.RGBA{R: 0x7f, G: 0x00, B: 0x00, A: 0xff},
+					color.RGBA{R: 0x00, G: 0x7f, B: 0x00, A: 0xff},
+					color.RGBA{R: 0x00, G: 0x00, B: 0x7f, A: 0xff},
 				},
 				Pix: []uint8{0x0, 0x1, 0x2, 0x3, 0x4, 0x5},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 6, 1),
 				Stride: 6 * 4,
 				Pix: []uint8{
@@ -314,7 +314,7 @@ func TestClone(t *testing.T) {
 			if _, ok := tc.src.(*image.YCbCr); ok {
 				delta = 1
 			}
-			if !compareNRGBA(got, tc.want, delta) {
+			if !compareRGBA(got, tc.want, delta) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -326,11 +326,11 @@ func TestCrop(t *testing.T) {
 		name string
 		src  image.Image
 		r    image.Rectangle
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"Crop 2x3 2x3",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -340,7 +340,7 @@ func TestCrop(t *testing.T) {
 				},
 			},
 			image.Rect(-1, -1, 1, 2),
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 3),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -352,7 +352,7 @@ func TestCrop(t *testing.T) {
 		},
 		{
 			"Crop 2x3 2x1",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -362,7 +362,7 @@ func TestCrop(t *testing.T) {
 				},
 			},
 			image.Rect(-1, 0, 1, 1),
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -374,7 +374,7 @@ func TestCrop(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := Crop(tc.src, tc.r)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -393,11 +393,11 @@ func TestCropCenter(t *testing.T) {
 		name string
 		src  image.Image
 		w, h int
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"CropCenter 2x3 2x1",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -407,7 +407,7 @@ func TestCropCenter(t *testing.T) {
 				},
 			},
 			2, 1,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -417,7 +417,7 @@ func TestCropCenter(t *testing.T) {
 		},
 		{
 			"CropCenter 2x3 0x1",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -427,7 +427,7 @@ func TestCropCenter(t *testing.T) {
 				},
 			},
 			0, 1,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 0, 0),
 				Stride: 0,
 				Pix:    []uint8{},
@@ -435,7 +435,7 @@ func TestCropCenter(t *testing.T) {
 		},
 		{
 			"CropCenter 2x3 5x5",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -445,7 +445,7 @@ func TestCropCenter(t *testing.T) {
 				},
 			},
 			5, 5,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 3),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -459,7 +459,7 @@ func TestCropCenter(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := CropCenter(tc.src, tc.w, tc.h)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -472,11 +472,11 @@ func TestCropAnchor(t *testing.T) {
 		src    image.Image
 		w, h   int
 		anchor Anchor
-		want   *image.NRGBA
+		want   *image.RGBA
 	}{
 		{
 			"CropAnchor 4x4 2x2 TopLeft",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -488,7 +488,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			2, 2,
 			TopLeft,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -499,7 +499,7 @@ func TestCropAnchor(t *testing.T) {
 		},
 		{
 			"CropAnchor 4x4 2x2 Top",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -511,7 +511,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			2, 2,
 			Top,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -522,7 +522,7 @@ func TestCropAnchor(t *testing.T) {
 		},
 		{
 			"CropAnchor 4x4 2x2 TopRight",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -534,7 +534,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			2, 2,
 			TopRight,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -545,7 +545,7 @@ func TestCropAnchor(t *testing.T) {
 		},
 		{
 			"CropAnchor 4x4 2x2 Left",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -557,7 +557,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			2, 2,
 			Left,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -568,7 +568,7 @@ func TestCropAnchor(t *testing.T) {
 		},
 		{
 			"CropAnchor 4x4 2x2 Center",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -580,7 +580,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			2, 2,
 			Center,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -591,7 +591,7 @@ func TestCropAnchor(t *testing.T) {
 		},
 		{
 			"CropAnchor 4x4 2x2 Right",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -603,7 +603,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			2, 2,
 			Right,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -614,7 +614,7 @@ func TestCropAnchor(t *testing.T) {
 		},
 		{
 			"CropAnchor 4x4 2x2 BottomLeft",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -626,7 +626,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			2, 2,
 			BottomLeft,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -637,7 +637,7 @@ func TestCropAnchor(t *testing.T) {
 		},
 		{
 			"CropAnchor 4x4 2x2 Bottom",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -649,7 +649,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			2, 2,
 			Bottom,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -660,7 +660,7 @@ func TestCropAnchor(t *testing.T) {
 		},
 		{
 			"CropAnchor 4x4 2x2 BottomRight",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -672,7 +672,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			2, 2,
 			BottomRight,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -683,7 +683,7 @@ func TestCropAnchor(t *testing.T) {
 		},
 		{
 			"CropAnchor 4x4 0x0 BottomRight",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -695,7 +695,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			0, 0,
 			BottomRight,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 0, 0),
 				Stride: 0,
 				Pix:    []uint8{},
@@ -703,7 +703,7 @@ func TestCropAnchor(t *testing.T) {
 		},
 		{
 			"CropAnchor 4x4 100x100 BottomRight",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -715,7 +715,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			100, 100,
 			BottomRight,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 4, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -728,7 +728,7 @@ func TestCropAnchor(t *testing.T) {
 		},
 		{
 			"CropAnchor 4x4 1x100 BottomRight",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -740,7 +740,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			1, 100,
 			BottomRight,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 1, 4),
 				Stride: 1 * 4,
 				Pix: []uint8{
@@ -753,7 +753,7 @@ func TestCropAnchor(t *testing.T) {
 		},
 		{
 			"CropAnchor 4x4 0x100 BottomRight",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 3, 3),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -765,7 +765,7 @@ func TestCropAnchor(t *testing.T) {
 			},
 			0, 100,
 			BottomRight,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 0, 0),
 				Stride: 0,
 				Pix:    []uint8{},
@@ -775,7 +775,7 @@ func TestCropAnchor(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := CropAnchor(tc.src, tc.w, tc.h, tc.anchor)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -788,11 +788,11 @@ func TestPaste(t *testing.T) {
 		src1 image.Image
 		src2 image.Image
 		p    image.Point
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"Paste 2x3 2x3",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 3),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -801,7 +801,7 @@ func TestPaste(t *testing.T) {
 					0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -811,7 +811,7 @@ func TestPaste(t *testing.T) {
 				},
 			},
 			image.Pt(0, 0),
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 3),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -823,7 +823,7 @@ func TestPaste(t *testing.T) {
 		},
 		{
 			"Paste 2x3 2x1",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -832,7 +832,7 @@ func TestPaste(t *testing.T) {
 					0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(1, 1, 3, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -840,7 +840,7 @@ func TestPaste(t *testing.T) {
 				},
 			},
 			image.Pt(-1, 0),
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 3),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -852,7 +852,7 @@ func TestPaste(t *testing.T) {
 		},
 		{
 			"Paste 3x4 4x3 bottom right intersection",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -862,7 +862,7 @@ func TestPaste(t *testing.T) {
 					0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(1, 1, 5, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -872,7 +872,7 @@ func TestPaste(t *testing.T) {
 				},
 			},
 			image.Pt(0, 1),
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 4),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -885,7 +885,7 @@ func TestPaste(t *testing.T) {
 		},
 		{
 			"Paste 3x4 4x3 top left intersection",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -895,7 +895,7 @@ func TestPaste(t *testing.T) {
 					0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(1, 1, 5, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -905,7 +905,7 @@ func TestPaste(t *testing.T) {
 				},
 			},
 			image.Pt(-3, -2),
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 4),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -918,7 +918,7 @@ func TestPaste(t *testing.T) {
 		},
 		{
 			"Paste 3x4 4x3 no intersection",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -928,7 +928,7 @@ func TestPaste(t *testing.T) {
 					0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(1, 1, 5, 4),
 				Stride: 4 * 4,
 				Pix: []uint8{
@@ -938,7 +938,7 @@ func TestPaste(t *testing.T) {
 				},
 			},
 			image.Pt(-20, 20),
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 4),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -953,7 +953,7 @@ func TestPaste(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := Paste(tc.src1, tc.src2, tc.p)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -972,11 +972,11 @@ func TestPasteCenter(t *testing.T) {
 		name string
 		src1 image.Image
 		src2 image.Image
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"PasteCenter 2x3 2x1",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -985,14 +985,14 @@ func TestPasteCenter(t *testing.T) {
 					0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(1, 1, 3, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
 					0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 3),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1006,7 +1006,7 @@ func TestPasteCenter(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := PasteCenter(tc.src1, tc.src2)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -1020,11 +1020,11 @@ func TestOverlay(t *testing.T) {
 		src2 image.Image
 		p    image.Point
 		a    float64
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"Overlay 2x3 2x1 1.0",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1033,7 +1033,7 @@ func TestOverlay(t *testing.T) {
 					0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(1, 1, 3, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1042,7 +1042,7 @@ func TestOverlay(t *testing.T) {
 			},
 			image.Pt(-1, 0),
 			1.0,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 3),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1054,7 +1054,7 @@ func TestOverlay(t *testing.T) {
 		},
 		{
 			"Overlay 2x2 2x2 0.5",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1062,7 +1062,7 @@ func TestOverlay(t *testing.T) {
 					0x00, 0x00, 0xff, 0xff, 0x20, 0x20, 0x20, 0x00,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1072,7 +1072,7 @@ func TestOverlay(t *testing.T) {
 			},
 			image.Pt(-1, -1),
 			0.5,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1083,7 +1083,7 @@ func TestOverlay(t *testing.T) {
 		},
 		{
 			"Overlay 2x2 2x2 0.5 no intersection",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1091,7 +1091,7 @@ func TestOverlay(t *testing.T) {
 					0x00, 0x00, 0xff, 0xff, 0x20, 0x20, 0x20, 0x00,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 1),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1101,7 +1101,7 @@ func TestOverlay(t *testing.T) {
 			},
 			image.Pt(-10, 10),
 			0.5,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1114,7 +1114,7 @@ func TestOverlay(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := Overlay(tc.src1, tc.src2, tc.p, tc.a)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -1134,11 +1134,11 @@ func TestOverlayCenter(t *testing.T) {
 		src1 image.Image
 		src2 image.Image
 		a    float64
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"OverlayCenter 2x3 2x1",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 1, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1147,7 +1147,7 @@ func TestOverlayCenter(t *testing.T) {
 					0x10, 0x10, 0x10, 0xff, 0x10, 0x10, 0x10, 0xff,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(1, 1, 3, 2),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1155,7 +1155,7 @@ func TestOverlayCenter(t *testing.T) {
 				},
 			},
 			0.5,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 2, 3),
 				Stride: 2 * 4,
 				Pix: []uint8{
@@ -1169,7 +1169,7 @@ func TestOverlayCenter(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := OverlayCenter(tc.src1, tc.src2, 0.5)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})

@@ -62,19 +62,19 @@ func precomputeWeights(dstSize, srcSize int, filter ResampleFilter) [][]indexWei
 //
 //	dstImage := imaging.Resize(srcImage, 800, 600, imaging.Lanczos)
 //
-func Resize(img image.Image, width, height int, filter ResampleFilter) *image.NRGBA {
+func Resize(img image.Image, width, height int, filter ResampleFilter) *image.RGBA {
 	dstW, dstH := width, height
 	if dstW < 0 || dstH < 0 {
-		return &image.NRGBA{}
+		return &image.RGBA{}
 	}
 	if dstW == 0 && dstH == 0 {
-		return &image.NRGBA{}
+		return &image.RGBA{}
 	}
 
 	srcW := img.Bounds().Dx()
 	srcH := img.Bounds().Dy()
 	if srcW <= 0 || srcH <= 0 {
-		return &image.NRGBA{}
+		return &image.RGBA{}
 	}
 
 	// If new width or height is 0 then preserve aspect ratio, minimum 1px.
@@ -106,9 +106,9 @@ func Resize(img image.Image, width, height int, filter ResampleFilter) *image.NR
 
 }
 
-func resizeHorizontal(img image.Image, width int, filter ResampleFilter) *image.NRGBA {
+func resizeHorizontal(img image.Image, width int, filter ResampleFilter) *image.RGBA {
 	src := newScanner(img)
-	dst := image.NewNRGBA(image.Rect(0, 0, width, src.h))
+	dst := image.NewRGBA(image.Rect(0, 0, width, src.h))
 	weights := precomputeWeights(width, src.w, filter)
 	parallel(0, src.h, func(ys <-chan int) {
 		scanLine := make([]uint8, src.w*4)
@@ -141,9 +141,9 @@ func resizeHorizontal(img image.Image, width int, filter ResampleFilter) *image.
 	return dst
 }
 
-func resizeVertical(img image.Image, height int, filter ResampleFilter) *image.NRGBA {
+func resizeVertical(img image.Image, height int, filter ResampleFilter) *image.RGBA {
 	src := newScanner(img)
-	dst := image.NewNRGBA(image.Rect(0, 0, src.w, height))
+	dst := image.NewRGBA(image.Rect(0, 0, src.w, height))
 	weights := precomputeWeights(height, src.h, filter)
 	parallel(0, src.w, func(xs <-chan int) {
 		scanLine := make([]uint8, src.h*4)
@@ -176,8 +176,8 @@ func resizeVertical(img image.Image, height int, filter ResampleFilter) *image.N
 }
 
 // resizeNearest is a fast nearest-neighbor resize, no filtering.
-func resizeNearest(img image.Image, width, height int) *image.NRGBA {
-	dst := image.NewNRGBA(image.Rect(0, 0, width, height))
+func resizeNearest(img image.Image, width, height int) *image.RGBA {
+	dst := image.NewRGBA(image.Rect(0, 0, width, height))
 	dx := float64(img.Bounds().Dx()) / float64(width)
 	dy := float64(img.Bounds().Dy()) / float64(height)
 
@@ -195,7 +195,7 @@ func resizeNearest(img image.Image, width, height int) *image.NRGBA {
 			}
 		})
 	} else {
-		src := toNRGBA(img)
+		src := toRGBA(img)
 		parallel(0, height, func(ys <-chan int) {
 			for y := range ys {
 				srcY := int((float64(y) + 0.5) * dy)
@@ -221,11 +221,11 @@ func resizeNearest(img image.Image, width, height int) *image.NRGBA {
 //
 //	dstImage := imaging.Fit(srcImage, 800, 600, imaging.Lanczos)
 //
-func Fit(img image.Image, width, height int, filter ResampleFilter) *image.NRGBA {
+func Fit(img image.Image, width, height int, filter ResampleFilter) *image.RGBA {
 	maxW, maxH := width, height
 
 	if maxW <= 0 || maxH <= 0 {
-		return &image.NRGBA{}
+		return &image.RGBA{}
 	}
 
 	srcBounds := img.Bounds()
@@ -233,7 +233,7 @@ func Fit(img image.Image, width, height int, filter ResampleFilter) *image.NRGBA
 	srcH := srcBounds.Dy()
 
 	if srcW <= 0 || srcH <= 0 {
-		return &image.NRGBA{}
+		return &image.RGBA{}
 	}
 
 	if srcW <= maxW && srcH <= maxH {
@@ -262,11 +262,11 @@ func Fit(img image.Image, width, height int, filter ResampleFilter) *image.NRGBA
 //
 //	dstImage := imaging.Fill(srcImage, 800, 600, imaging.Center, imaging.Lanczos)
 //
-func Fill(img image.Image, width, height int, anchor Anchor, filter ResampleFilter) *image.NRGBA {
+func Fill(img image.Image, width, height int, anchor Anchor, filter ResampleFilter) *image.RGBA {
 	dstW, dstH := width, height
 
 	if dstW <= 0 || dstH <= 0 {
-		return &image.NRGBA{}
+		return &image.RGBA{}
 	}
 
 	srcBounds := img.Bounds()
@@ -274,7 +274,7 @@ func Fill(img image.Image, width, height int, anchor Anchor, filter ResampleFilt
 	srcH := srcBounds.Dy()
 
 	if srcW <= 0 || srcH <= 0 {
-		return &image.NRGBA{}
+		return &image.RGBA{}
 	}
 
 	if srcW == dstW && srcH == dstH {
@@ -291,7 +291,7 @@ func Fill(img image.Image, width, height int, anchor Anchor, filter ResampleFilt
 // the given anchor point, then scales it to the specified dimensions and returns the transformed image.
 //
 // This is generally faster than resizing first, but may result in inaccuracies when used on small source images.
-func cropAndResize(img image.Image, width, height int, anchor Anchor, filter ResampleFilter) *image.NRGBA {
+func cropAndResize(img image.Image, width, height int, anchor Anchor, filter ResampleFilter) *image.RGBA {
 	dstW, dstH := width, height
 
 	srcBounds := img.Bounds()
@@ -300,7 +300,7 @@ func cropAndResize(img image.Image, width, height int, anchor Anchor, filter Res
 	srcAspectRatio := float64(srcW) / float64(srcH)
 	dstAspectRatio := float64(dstW) / float64(dstH)
 
-	var tmp *image.NRGBA
+	var tmp *image.RGBA
 	if srcAspectRatio < dstAspectRatio {
 		cropH := float64(srcW) * float64(dstH) / float64(dstW)
 		tmp = CropAnchor(img, srcW, int(math.Max(1, cropH)+0.5), anchor)
@@ -315,7 +315,7 @@ func cropAndResize(img image.Image, width, height int, anchor Anchor, filter Res
 // resizeAndCrop resizes the image to the smallest possible size that will cover the specified dimensions,
 // crops the resized image to the specified dimensions using the given anchor point and returns
 // the transformed image.
-func resizeAndCrop(img image.Image, width, height int, anchor Anchor, filter ResampleFilter) *image.NRGBA {
+func resizeAndCrop(img image.Image, width, height int, anchor Anchor, filter ResampleFilter) *image.RGBA {
 	dstW, dstH := width, height
 
 	srcBounds := img.Bounds()
@@ -324,7 +324,7 @@ func resizeAndCrop(img image.Image, width, height int, anchor Anchor, filter Res
 	srcAspectRatio := float64(srcW) / float64(srcH)
 	dstAspectRatio := float64(dstW) / float64(dstH)
 
-	var tmp *image.NRGBA
+	var tmp *image.RGBA
 	if srcAspectRatio < dstAspectRatio {
 		tmp = Resize(img, dstW, 0, filter)
 	} else {
@@ -341,7 +341,7 @@ func resizeAndCrop(img image.Image, width, height int, anchor Anchor, filter Res
 //
 //	dstImage := imaging.Thumbnail(srcImage, 100, 100, imaging.Lanczos)
 //
-func Thumbnail(img image.Image, width, height int, filter ResampleFilter) *image.NRGBA {
+func Thumbnail(img image.Image, width, height int, filter ResampleFilter) *image.RGBA {
 	return Fill(img, width, height, Center, filter)
 }
 

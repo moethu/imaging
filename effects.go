@@ -16,7 +16,7 @@ func gaussianBlurKernel(x, sigma float64) float64 {
 //
 //	dstImage := imaging.Blur(srcImage, 3.5)
 //
-func Blur(img image.Image, sigma float64) *image.NRGBA {
+func Blur(img image.Image, sigma float64) *image.RGBA {
 	if sigma <= 0 {
 		return Clone(img)
 	}
@@ -31,9 +31,9 @@ func Blur(img image.Image, sigma float64) *image.NRGBA {
 	return blurVertical(blurHorizontal(img, kernel), kernel)
 }
 
-func blurHorizontal(img image.Image, kernel []float64) *image.NRGBA {
+func blurHorizontal(img image.Image, kernel []float64) *image.RGBA {
 	src := newScanner(img)
-	dst := image.NewNRGBA(image.Rect(0, 0, src.w, src.h))
+	dst := image.NewRGBA(image.Rect(0, 0, src.w, src.h))
 	radius := len(kernel) - 1
 
 	parallel(0, src.h, func(ys <-chan int) {
@@ -81,9 +81,9 @@ func blurHorizontal(img image.Image, kernel []float64) *image.NRGBA {
 	return dst
 }
 
-func blurVertical(img image.Image, kernel []float64) *image.NRGBA {
+func blurVertical(img image.Image, kernel []float64) *image.RGBA {
 	src := newScanner(img)
-	dst := image.NewNRGBA(image.Rect(0, 0, src.w, src.h))
+	dst := image.NewRGBA(image.Rect(0, 0, src.w, src.h))
 	radius := len(kernel) - 1
 
 	parallel(0, src.w, func(xs <-chan int) {
@@ -138,13 +138,13 @@ func blurVertical(img image.Image, kernel []float64) *image.NRGBA {
 //
 //	dstImage := imaging.Sharpen(srcImage, 3.5)
 //
-func Sharpen(img image.Image, sigma float64) *image.NRGBA {
+func Sharpen(img image.Image, sigma float64) *image.RGBA {
 	if sigma <= 0 {
 		return Clone(img)
 	}
 
 	src := newScanner(img)
-	dst := image.NewNRGBA(image.Rect(0, 0, src.w, src.h))
+	dst := image.NewRGBA(image.Rect(0, 0, src.w, src.h))
 	blurred := Blur(img, sigma)
 
 	parallel(0, src.h, func(ys <-chan int) {

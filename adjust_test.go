@@ -10,11 +10,11 @@ func TestGrayscale(t *testing.T) {
 	testCases := []struct {
 		name string
 		src  image.Image
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"Grayscale 3x3",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -23,7 +23,7 @@ func TestGrayscale(t *testing.T) {
 					0x00, 0x00, 0x00, 0xff, 0x33, 0x33, 0x33, 0xff, 0xff, 0xff, 0xff, 0xff,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -37,7 +37,7 @@ func TestGrayscale(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := Grayscale(tc.src)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -55,11 +55,11 @@ func TestInvert(t *testing.T) {
 	testCases := []struct {
 		name string
 		src  image.Image
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"Invert 3x3",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -68,7 +68,7 @@ func TestInvert(t *testing.T) {
 					0x00, 0x00, 0x00, 0xff, 0x33, 0x33, 0x33, 0xff, 0xff, 0xff, 0xff, 0xff,
 				},
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -82,7 +82,7 @@ func TestInvert(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := Invert(tc.src)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -101,11 +101,11 @@ func TestAdjustSaturation(t *testing.T) {
 		name string
 		src  image.Image
 		p    float64
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"AdjustSaturation 3x3 10",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -115,7 +115,7 @@ func TestAdjustSaturation(t *testing.T) {
 				},
 			},
 			10,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -127,7 +127,7 @@ func TestAdjustSaturation(t *testing.T) {
 		},
 		{
 			"AdjustSaturation 3x3 100",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -137,7 +137,7 @@ func TestAdjustSaturation(t *testing.T) {
 				},
 			},
 			100,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -149,7 +149,7 @@ func TestAdjustSaturation(t *testing.T) {
 		},
 		{
 			"AdjustSaturation 3x3 -10",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -159,7 +159,7 @@ func TestAdjustSaturation(t *testing.T) {
 				},
 			},
 			-10,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -171,7 +171,7 @@ func TestAdjustSaturation(t *testing.T) {
 		},
 		{
 			"AdjustSaturation 3x3 -100",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -181,7 +181,7 @@ func TestAdjustSaturation(t *testing.T) {
 				},
 			},
 			-100,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -193,7 +193,7 @@ func TestAdjustSaturation(t *testing.T) {
 		},
 		{
 			"AdjustSaturation 3x3 0",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -203,7 +203,7 @@ func TestAdjustSaturation(t *testing.T) {
 				},
 			},
 			0,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -217,7 +217,7 @@ func TestAdjustSaturation(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := AdjustSaturation(tc.src, tc.p)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -234,7 +234,7 @@ func TestAdjustSaturationGolden(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to open image: %v", err)
 		}
-		if !compareNRGBAGolden(got, toNRGBA(want)) {
+		if !compareRGBAGolden(got, toRGBA(want)) {
 			t.Errorf("resulting image differs from golden: %s", name)
 		}
 	}
@@ -252,11 +252,11 @@ func TestAdjustHue(t *testing.T) {
 		name string
 		src  image.Image
 		p    float64
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"AdjustHue 3x3 -540",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -266,7 +266,7 @@ func TestAdjustHue(t *testing.T) {
 				},
 			},
 			-540,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -278,7 +278,7 @@ func TestAdjustHue(t *testing.T) {
 		},
 		{
 			"AdjustHue 3x3 -360",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -288,7 +288,7 @@ func TestAdjustHue(t *testing.T) {
 				},
 			},
 			-360,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -300,7 +300,7 @@ func TestAdjustHue(t *testing.T) {
 		},
 		{
 			"AdjustHue 3x3 -350",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -310,7 +310,7 @@ func TestAdjustHue(t *testing.T) {
 				},
 			},
 			-350,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -322,7 +322,7 @@ func TestAdjustHue(t *testing.T) {
 		},
 		{
 			"AdjustHue 3x3 -180",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -332,7 +332,7 @@ func TestAdjustHue(t *testing.T) {
 				},
 			},
 			-180,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -344,7 +344,7 @@ func TestAdjustHue(t *testing.T) {
 		},
 		{
 			"AdjustHue 3x3 -10",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -354,7 +354,7 @@ func TestAdjustHue(t *testing.T) {
 				},
 			},
 			-10,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -366,7 +366,7 @@ func TestAdjustHue(t *testing.T) {
 		},
 		{
 			"AdjustHue 3x3 0",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -376,7 +376,7 @@ func TestAdjustHue(t *testing.T) {
 				},
 			},
 			0,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -388,7 +388,7 @@ func TestAdjustHue(t *testing.T) {
 		},
 		{
 			"AdjustHue 3x3 10",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -398,7 +398,7 @@ func TestAdjustHue(t *testing.T) {
 				},
 			},
 			10,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -410,7 +410,7 @@ func TestAdjustHue(t *testing.T) {
 		},
 		{
 			"AdjustHue 3x3 180",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -420,7 +420,7 @@ func TestAdjustHue(t *testing.T) {
 				},
 			},
 			180,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -432,7 +432,7 @@ func TestAdjustHue(t *testing.T) {
 		},
 		{
 			"AdjustHue 3x3 350",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -442,7 +442,7 @@ func TestAdjustHue(t *testing.T) {
 				},
 			},
 			350,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -454,7 +454,7 @@ func TestAdjustHue(t *testing.T) {
 		},
 		{
 			"AdjustHue 3x3 360",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -464,7 +464,7 @@ func TestAdjustHue(t *testing.T) {
 				},
 			},
 			360,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -476,7 +476,7 @@ func TestAdjustHue(t *testing.T) {
 		},
 		{
 			"AdjustHue 3x3 540",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -486,7 +486,7 @@ func TestAdjustHue(t *testing.T) {
 				},
 			},
 			540,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -500,7 +500,7 @@ func TestAdjustHue(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := AdjustHue(tc.src, tc.p)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -521,7 +521,7 @@ func TestAdjustHueGolden(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to open image: %v", err)
 		}
-		if !compareNRGBAGolden(got, toNRGBA(want)) {
+		if !compareRGBAGolden(got, toRGBA(want)) {
 			t.Errorf("resulting image differs from golden: %s", name)
 		}
 	}
@@ -539,11 +539,11 @@ func TestAdjustContrast(t *testing.T) {
 		name string
 		src  image.Image
 		p    float64
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"AdjustContrast 3x3 10",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -553,7 +553,7 @@ func TestAdjustContrast(t *testing.T) {
 				},
 			},
 			10,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -565,7 +565,7 @@ func TestAdjustContrast(t *testing.T) {
 		},
 		{
 			"AdjustContrast 3x3 100",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -575,7 +575,7 @@ func TestAdjustContrast(t *testing.T) {
 				},
 			},
 			100,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -587,7 +587,7 @@ func TestAdjustContrast(t *testing.T) {
 		},
 		{
 			"AdjustContrast 3x3 -10",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -597,7 +597,7 @@ func TestAdjustContrast(t *testing.T) {
 				},
 			},
 			-10,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -609,7 +609,7 @@ func TestAdjustContrast(t *testing.T) {
 		},
 		{
 			"AdjustContrast 3x3 -100",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -619,7 +619,7 @@ func TestAdjustContrast(t *testing.T) {
 				},
 			},
 			-100,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -631,7 +631,7 @@ func TestAdjustContrast(t *testing.T) {
 		},
 		{
 			"AdjustContrast 3x3 0",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -641,7 +641,7 @@ func TestAdjustContrast(t *testing.T) {
 				},
 			},
 			0,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -655,7 +655,7 @@ func TestAdjustContrast(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := AdjustContrast(tc.src, tc.p)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -672,7 +672,7 @@ func TestAdjustContrastGolden(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to open image: %v", err)
 		}
-		if !compareNRGBAGolden(got, toNRGBA(want)) {
+		if !compareRGBAGolden(got, toRGBA(want)) {
 			t.Fatalf("resulting image differs from golden: %s", name)
 		}
 	}
@@ -690,11 +690,11 @@ func TestAdjustBrightness(t *testing.T) {
 		name string
 		src  image.Image
 		p    float64
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"AdjustBrightness 3x3 10",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -704,7 +704,7 @@ func TestAdjustBrightness(t *testing.T) {
 				},
 			},
 			10,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -716,7 +716,7 @@ func TestAdjustBrightness(t *testing.T) {
 		},
 		{
 			"AdjustBrightness 3x3 100",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -726,7 +726,7 @@ func TestAdjustBrightness(t *testing.T) {
 				},
 			},
 			100,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -738,7 +738,7 @@ func TestAdjustBrightness(t *testing.T) {
 		},
 		{
 			"AdjustBrightness 3x3 -10",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -748,7 +748,7 @@ func TestAdjustBrightness(t *testing.T) {
 				},
 			},
 			-10,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -760,7 +760,7 @@ func TestAdjustBrightness(t *testing.T) {
 		},
 		{
 			"AdjustBrightness 3x3 -100",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -770,7 +770,7 @@ func TestAdjustBrightness(t *testing.T) {
 				},
 			},
 			-100,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -782,7 +782,7 @@ func TestAdjustBrightness(t *testing.T) {
 		},
 		{
 			"AdjustBrightness 3x3 0",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -792,7 +792,7 @@ func TestAdjustBrightness(t *testing.T) {
 				},
 			},
 			0,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -806,7 +806,7 @@ func TestAdjustBrightness(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := AdjustBrightness(tc.src, tc.p)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -823,7 +823,7 @@ func TestAdjustBrightnessGolden(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to open image: %v", err)
 		}
-		if !compareNRGBAGolden(got, toNRGBA(want)) {
+		if !compareRGBAGolden(got, toRGBA(want)) {
 			t.Fatalf("resulting image differs from golden: %s", name)
 		}
 	}
@@ -841,11 +841,11 @@ func TestAdjustGamma(t *testing.T) {
 		name string
 		src  image.Image
 		p    float64
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"AdjustGamma 3x3 0.75",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -855,7 +855,7 @@ func TestAdjustGamma(t *testing.T) {
 				},
 			},
 			0.75,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -867,7 +867,7 @@ func TestAdjustGamma(t *testing.T) {
 		},
 		{
 			"AdjustGamma 3x3 1.5",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -877,7 +877,7 @@ func TestAdjustGamma(t *testing.T) {
 				},
 			},
 			1.5,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -889,7 +889,7 @@ func TestAdjustGamma(t *testing.T) {
 		},
 		{
 			"AdjustGamma 3x3 1.0",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -899,7 +899,7 @@ func TestAdjustGamma(t *testing.T) {
 				},
 			},
 			1.0,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -913,7 +913,7 @@ func TestAdjustGamma(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := AdjustGamma(tc.src, tc.p)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -930,7 +930,7 @@ func TestAdjustGammaGolden(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to open image: %v", err)
 		}
-		if !compareNRGBAGolden(got, toNRGBA(want)) {
+		if !compareRGBAGolden(got, toRGBA(want)) {
 			t.Fatalf("resulting image differs from golden: %s", name)
 		}
 	}
@@ -949,11 +949,11 @@ func TestAdjustSigmoid(t *testing.T) {
 		src  image.Image
 		m    float64
 		p    float64
-		want *image.NRGBA
+		want *image.RGBA
 	}{
 		{
 			"AdjustSigmoid 3x3 0.5 3.0",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -964,7 +964,7 @@ func TestAdjustSigmoid(t *testing.T) {
 			},
 			0.5,
 			3.0,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -976,7 +976,7 @@ func TestAdjustSigmoid(t *testing.T) {
 		},
 		{
 			"AdjustSigmoid 3x3 0.5 -3.0",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -987,7 +987,7 @@ func TestAdjustSigmoid(t *testing.T) {
 			},
 			0.5,
 			-3.0,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -999,7 +999,7 @@ func TestAdjustSigmoid(t *testing.T) {
 		},
 		{
 			"AdjustSigmoid 3x3 0.5 0.0",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -1010,7 +1010,7 @@ func TestAdjustSigmoid(t *testing.T) {
 			},
 			0.5,
 			0.0,
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -1024,7 +1024,7 @@ func TestAdjustSigmoid(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := AdjustSigmoid(tc.src, tc.m, tc.p)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -1042,12 +1042,12 @@ func TestAdjustFunc(t *testing.T) {
 	testCases := []struct {
 		name string
 		src  image.Image
-		fn   func(c color.NRGBA) color.NRGBA
-		want *image.NRGBA
+		fn   func(c color.RGBA) color.RGBA
+		want *image.RGBA
 	}{
 		{
 			"invert",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -1056,10 +1056,10 @@ func TestAdjustFunc(t *testing.T) {
 					0x00, 0x00, 0x00, 0xff, 0x33, 0x33, 0x33, 0xff, 0xff, 0xff, 0xff, 0xff,
 				},
 			},
-			func(c color.NRGBA) color.NRGBA {
-				return color.NRGBA{255 - c.R, 255 - c.G, 255 - c.B, c.A}
+			func(c color.RGBA) color.RGBA {
+				return color.RGBA{255 - c.R, 255 - c.G, 255 - c.B, c.A}
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -1071,7 +1071,7 @@ func TestAdjustFunc(t *testing.T) {
 		},
 		{
 			"threshold",
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(-1, -1, 2, 2),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -1080,14 +1080,14 @@ func TestAdjustFunc(t *testing.T) {
 					0x00, 0x00, 0x00, 0xff, 0x33, 0x33, 0x33, 0xff, 0xff, 0xff, 0xff, 0xff,
 				},
 			},
-			func(c color.NRGBA) color.NRGBA {
+			func(c color.RGBA) color.RGBA {
 				y := 0.299*float64(c.R) + 0.587*float64(c.G) + 0.114*float64(c.B)
 				if y > 0x55 {
-					return color.NRGBA{0xff, 0xff, 0xff, c.A}
+					return color.RGBA{0xff, 0xff, 0xff, c.A}
 				}
-				return color.NRGBA{0x00, 0x00, 0x00, c.A}
+				return color.RGBA{0x00, 0x00, 0x00, c.A}
 			},
-			&image.NRGBA{
+			&image.RGBA{
 				Rect:   image.Rect(0, 0, 3, 3),
 				Stride: 3 * 4,
 				Pix: []uint8{
@@ -1101,7 +1101,7 @@ func TestAdjustFunc(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := AdjustFunc(tc.src, tc.fn)
-			if !compareNRGBA(got, tc.want, 0) {
+			if !compareRGBA(got, tc.want, 0) {
 				t.Fatalf("got result %#v want %#v", got, tc.want)
 			}
 		})
@@ -1111,8 +1111,8 @@ func TestAdjustFunc(t *testing.T) {
 func BenchmarkAdjustFunc(b *testing.B) {
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		AdjustFunc(testdataBranchesJPG, func(c color.NRGBA) color.NRGBA {
-			return color.NRGBA{c.B, c.G, c.R, c.A}
+		AdjustFunc(testdataBranchesJPG, func(c color.RGBA) color.RGBA {
+			return color.RGBA{c.B, c.G, c.R, c.A}
 		})
 	}
 }
